@@ -1,0 +1,12 @@
+---
+
+- name: Create a webserver
+  hosts: webservers
+  become: yes
+  become_user: root
+  remote_user: root
+  roles:
+    - common
+    - frontend
+    # - backend
+    # - database

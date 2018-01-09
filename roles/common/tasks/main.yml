@@ -1,0 +1,55 @@
+---
+
+# https://stackoverflow.com/questions/24765930/add-swap-memory-with-ansible
+
+- name: install base dependencies
+  apt: name=build-essential update_cache=true state=installed
+  tags: packages
+
+- name: check for swapfile
+  stat: path=/swapfile
+  register: swap_file_check
+  tags:
+    - swap
+
+- name: create swapfile
+  command: fallocate -l {{ swapsize }} /swapfile
+  when: not swap_file_check.stat.exists
+  tags:
+    - swap
+
+- name: swapfile perms
+  file: path=/swapfile
+        owner=root
+        group=root
+        mode=0600
+  tags:
+    - swap
+
+- name: swapfile format
+  command: "mkswap /swapfile"
+  when: not swap_file_check.stat.exists
+  tags:
+    - swap
+
+- name: swapfile in fstab
+  mount: name=none
+         src=/swapfile
+         fstype=swap
+         opts=sw
+         passno=0
+         dump=0
+         state=present
+  tags:
+    - swap
+
+- name: activate swap
+  command: swapon -a
+  when: not swap_file_check.stat.exists
+  tags:
+    - swap
+
+- name: set swappiness
+  sysctl: name=vm.swappiness value={{ swappiness }}
+  tags:
+    - swap

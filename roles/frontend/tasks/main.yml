@@ -1,0 +1,62 @@
+---
+
+- name: add nginx ppa
+  apt_repository: repo="ppa:nginx/stable"
+  tags: packages
+- name: add certbot ppa
+  apt_repository: repo="ppa:certbot/certbot"
+  tags: packages
+- name: install nginx and certbot
+  apt: name=nginx,python-certbot-nginx update_cache=true state=installed
+  tags: packages
+- name: get node install script
+  get_url: url=https://deb.nodesource.com/setup_8.x dest=/tmp mode=0700
+- name: execute node install script
+  command: /tmp/setup_8.x
+- name: install dependencies
+  apt: name=nodejs update_cache=yes state=installed
+  tags: packages
+- name: pull frontend repo
+  git: repo=https://github.com/angstromctf/angstromctf.git dest=/srv/angstromctf
+  tags: deploy, frontend
+- name: install frontend dependencies
+  npm: path=/srv/angstromctf/
+  tags: packages, frontend
+- name: build frontend
+  command: "/usr/bin/ng build --prod --no-progress --build-optimizer"
+  args:
+    chdir: /srv/angstromctf
+  tags: deploy
+- name: check for certificate
+  stat: path=/etc/letsencrypt/live
+  register: cert
+  tags: cert
+- name: stop nginx
+  service: name=nginx state=stopped
+  when: not cert.stat.exists
+  tags: cert
+- name: create certificate
+  command: certbot --standalone certonly --email {{ email }} -d angstromctf.com -d www.angstromctf.com -d actf.co -d www.actf.co --agree-tos --non-interactive
+  when: not cert.stat.exists
+  tags: cert
+- name: start nginx
+  service: name=nginx state=restarted
+  when: not cert.stat.exists
+  tags: cert
+- name: update nginx config
+  copy:
+    src: ../files/angstromctf.com
+    dest: /etc/nginx/sites-available/
+    owner: root
+    group: root
+    mode: 0755
+  tags: config
+- name: symlink config
+  file:
+    src: /etc/nginx/sites-available/angstromctf.com
+    dest: /etc/nginx/sites-enabled/angstromctf.com
+    owner: root
+    group: root
+    state: link
+  notify: restart nginx
+  tags: config
