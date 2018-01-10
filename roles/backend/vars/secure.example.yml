@@ -1,0 +1,4 @@
+---
+
+django_secret_key: "[REDACTED]"
+email_password: "[REDACTED]"

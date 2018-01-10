@@ -1,0 +1,52 @@
+SECRET_KEY = '{{ django_secret_key }}'
+DEBUG = False
+
+ALLOWED_HOSTS = ['angstromctf.com', 'localhost']
+
+DATABASES = {
+    'default': {
+        'ENGINE' : 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+    }
+}
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+
+SHELL_ENABLED = False
+SHELL_PRIVATE_KEY = "djangoctf/shell_privkey"
+SHELL_HOSTNAME = "shell.angstromctf.com"
+
+REQUIRE_USER_ACTIVATION = True
+
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST_USER = 'contact@angstromctf.com'
+EMAIL_HOST_PASSWORD = '{{ email_password }}'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+SERVER_EMAIL = 'angstromCTF Team <contact@angstromctf.com>'
+DEFAULT_FROM_EMAIL = 'angstromCTF Team <contact@angstromctf.com>'
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/var/log/djangoctf.log'
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file', 'mail_admins'],
+            'level': 'DEBUG',
+            'propagate': True
+        }
+    }
+}
+ADMINS = [('Noah Singer', 'singerng@gmail.com')]

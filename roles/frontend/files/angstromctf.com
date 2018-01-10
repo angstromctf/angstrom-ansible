@@ -34,9 +34,9 @@ server {
 
 	add_header Cache-Control no-cache;
 
-	location /api {
+	location /api/ {
 		include proxy_params;
-		proxy_pass http://localhost:8000;
+		proxy_pass http://localhost:8000/;
 	}
 
 	#location /static {

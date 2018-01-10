@@ -26,7 +26,7 @@
   command: "/usr/bin/ng build --prod --no-progress --build-optimizer"
   args:
     chdir: /srv/angstromctf
-  tags: deploy
+  tags: deploy, frontend
 - name: check for certificate
   stat: path=/etc/letsencrypt/live
   register: cert
