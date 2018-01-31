@@ -1,4 +1,5 @@
 ---
 
 - name: restart nginx
+  changed_when: True
   service: name=nginx state=restarted

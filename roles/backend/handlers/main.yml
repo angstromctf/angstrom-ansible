@@ -1,0 +1,5 @@
+---
+
+- name: restart gunicorn
+  changed_when: True
+  systemd: name=djangoctf state=restarted enabled=yes daemon_reload=yes

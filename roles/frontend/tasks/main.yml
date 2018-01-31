@@ -58,5 +58,6 @@
     owner: root
     group: root
     state: link
-  notify: restart nginx
+  notify:
+    - restart nginx
   tags: config

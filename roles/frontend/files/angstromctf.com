@@ -1,7 +1,7 @@
 server {
 	listen 443 ssl;
 
-	server_name www.actf.co, actf.co, www.angstromctf.com;
+	server_name www.actf.co actf.co www.angstromctf.com;
 
 	ssl_certificate /etc/letsencrypt/live/angstromctf.com/fullchain.pem;
 	ssl_certificate_key /etc/letsencrypt/live/angstromctf.com/privkey.pem;
@@ -15,7 +15,7 @@ server {
 
 server {
 	listen 80;
-	server_name www.actf.co, actf.co, www.angstromctf.com, angstromctf.com;
+	server_name www.actf.co actf.co www.angstromctf.com angstromctf.com;
 
 	location / {
 		return 301 https://angstromctf.com$request_uri;
