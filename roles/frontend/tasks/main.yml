@@ -18,7 +18,7 @@
   tags: packages
 - name: pull frontend repo
   git: repo=https://github.com/angstromctf/angstromctf.git dest=/srv/angstromctf
-  tags: deploy, frontend
+  tags: frontend
 - name: install frontend dependencies
   npm: path=/srv/angstromctf/
   tags: packages, frontend
@@ -26,7 +26,7 @@
   command: "/usr/bin/ng build --prod --no-progress --build-optimizer"
   args:
     chdir: /srv/angstromctf
-  tags: deploy, frontend
+  tags: frontend
 - name: check for certificate
   stat: path=/etc/letsencrypt/live
   register: cert
@@ -50,6 +50,7 @@
     owner: root
     group: root
     mode: 0755
+  notify: restart nginx
   tags: config
 - name: symlink config
   file:
@@ -58,6 +59,4 @@
     owner: root
     group: root
     state: link
-  notify:
-    - restart nginx
   tags: config
