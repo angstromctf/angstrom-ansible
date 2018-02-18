@@ -1,3 +1,5 @@
+from . import *
+
 SECRET_KEY = '{{ django_secret_key }}'
 DEBUG = False
 
@@ -17,7 +19,7 @@ SHELL_ENABLED = False
 SHELL_PRIVATE_KEY = "djangoctf/shell_privkey"
 SHELL_HOSTNAME = "shell.angstromctf.com"
 
-REQUIRE_USER_ACTIVATION = True
+REQUIRE_USER_ACTIVATION = False
 
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_HOST_USER = 'contact@angstromctf.com'

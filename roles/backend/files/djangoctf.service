@@ -3,11 +3,11 @@ Description=Gunicorn instance to serve djangoctf
 After=network.target
 
 [Service]
-User=user
-Group=nginx
 WorkingDirectory=/srv/djangoctf
-Environment="PATH=/home/user/myproject/myprojectenv/bin"
-ExecStart=/home/user/myproject/myprojectenv/bin/gunicorn --workers 3 --bind unix:/var/djangoctf.sock -m 007 wsgi
+Environment=LC_ALL=C.UTF-8
+Environment=LANG=C.UTF-8
+EnvironmentFile=/srv/djangoctf/env.sh
+ExecStart=/usr/local/bin/pipenv run gunicorn --workers 3 djangoctf.wsgi:application
 
 [Install]
 WantedBy=multi-user.target

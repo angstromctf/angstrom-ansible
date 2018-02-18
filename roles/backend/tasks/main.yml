@@ -9,21 +9,23 @@
 - name: pull backend repo
   git: repo=https://github.com/angstromctf/djangoctf.git dest=/srv/djangoctf
   tags: deploy, backend
+  notify: restart gunicorn
 - name: migrate django database
   shell: pipenv run python3 manage.py makemigrations api && pipenv run python3 manage.py migrate chdir=/srv/djangoctf
   tags: deploy, backend
 - name: load secure backend variables
-  include_vars: file=secure.yml
-  tags: config
+  include_vars: file=../vars/secure.yml
+  tags: config, backend
 - name: setup backend settings
   template:
     remote_src: yes
-    src: ../templates/server.py.j2
-    dest: /srv/djangoctf/djangoctf/server.py
+    src: ../templates/production.py.j2
+    dest: /srv/djangoctf/djangoctf/settings/production.py
     owner: root
     group: root
     mode: 0755
-  tags: config
+  tags: config, backend
+  notify: restart gunicorn
 - name: install backend dependencies
   command: pipenv install --dev chdir=/srv/djangoctf
   tags: packages
