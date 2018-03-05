@@ -8,4 +8,4 @@ hard_inode_limit: 10000
 
 # Process limits
 process_limit: 16
-stack_size_limit: 8192
+stack_size_limit: 8192 # in kB

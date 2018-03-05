@@ -37,13 +37,13 @@
     state: present
 - name: restrict processes
   pam_limits:
-    domain: @teams
+    domain: "@teams"
     limit_type: hard
     limit_item: nproc
-    value: {{ process_limit }}
+    value: "{{ process_limit }}"
 - name: restrict stack size
   pam_limits:
-    domain: @teams
+    domain: "@teams"
     limit_type: hard
     limit_item: stack
-    value: {{ stack_size_limit }}
+    value: "{{ stack_size_limit }}"
