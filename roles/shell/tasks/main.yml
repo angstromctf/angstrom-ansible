@@ -1,0 +1,49 @@
+---
+
+- name: create teams group
+  group: name=teams state=present
+- name: install dependencies
+  apt: package=quota,linux-image-extra-virtual update_cache=true state=installed
+- name: initiate group quota
+  mount:
+    path: /
+    fstype: ext4
+    src: LABEL=cloudimg-rootfs
+    opts: defaults,grpquota
+    state: mounted
+- name: initiate process blocking
+  mount:
+    path: /proc
+    fstype: proc
+    src: proc
+    opts: hidepid=2
+    state: mounted
+- name: setup disk quota database
+  shell: |
+         quotacheck -agum
+         setquota -g teams {{ soft_block_limit }} {{ hard_block_limit }} {{ soft_inode_limit }} {{ hard_inode_limit }} /
+- name: reduce tmp permissions
+  file:
+    path: "{{ item }}"
+    mode: "u=rwx,g=rwx,o=rx"
+  with_items:
+    - /tmp
+    - /var/tmp
+    - /dev/shm
+- name: prevent dmesg messages
+  sysctl:
+    name: kernel.dmesg_restrict
+    value: 1
+    state: present
+- name: restrict processes
+  pam_limits:
+    domain: @teams
+    limit_type: hard
+    limit_item: nproc
+    value: {{ process_limit }}
+- name: restrict stack size
+  pam_limits:
+    domain: @teams
+    limit_type: hard
+    limit_item: stack
+    value: {{ stack_size_limit }}

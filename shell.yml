@@ -1,11 +1,10 @@
 ---
 
-- name: Create a webserver
-  hosts: webservers
+- name: Create shell servers
+  hosts: shellservers
   become: yes
   become_user: root
   remote_user: root
   roles:
     - common
-    - frontend
-    - backend
+    - shell

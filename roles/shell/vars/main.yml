@@ -1,0 +1,11 @@
+---
+
+# Disk quotas
+soft_block_limit: 8192
+hard_block_limit: 8192
+soft_inode_limit: 10000
+hard_inode_limit: 10000
+
+# Process limits
+process_limit: 16
+stack_size_limit: 8192
