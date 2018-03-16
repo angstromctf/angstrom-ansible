@@ -2,6 +2,19 @@
 
 - name: create teams group
   group: name=teams state=present
+- name: create problems group
+  group: name=problems state=present
+- name: create problems directory
+  file: path=/problems state=directory owner=root group=root
+- name: create teams directory
+  file: path=/teams state=directory owner=root group=root
+- name: copy motd
+  copy: src=motd dest=/etc/motd
+- name: copy scripts
+  copy: src={{ item }} dest=/root
+  with_items:
+    - addproblem.sh
+    - addteam.sh
 - name: install dependencies
   apt: package=quota,linux-image-extra-virtual update_cache=true state=installed
 - name: initiate group quota
@@ -11,7 +24,7 @@
     src: LABEL=cloudimg-rootfs
     opts: defaults,grpquota
     state: mounted
-- name: initiate process blocking
+- name: prevent process spying
   mount:
     path: /proc
     fstype: proc
@@ -25,7 +38,7 @@
 - name: reduce tmp permissions
   file:
     path: "{{ item }}"
-    mode: "u=rwx,g=rwx,o=rx"
+    mode: 1700
   with_items:
     - /tmp
     - /var/tmp

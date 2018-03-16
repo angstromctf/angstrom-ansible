@@ -1,10 +1,10 @@
 ---
 
-- name: add nginx ppa
-  apt_repository: repo="ppa:nginx/stable"
-  tags: packages
-- name: add certbot ppa
-  apt_repository: repo="ppa:certbot/certbot"
+- name: add ppas
+  apt_repository: repo="ppa:{{ item }}/stable"
+  with_items:
+    - nginx
+    - certbot
   tags: packages
 - name: install nginx and certbot
   apt: name=nginx,python-certbot-nginx update_cache=true state=installed

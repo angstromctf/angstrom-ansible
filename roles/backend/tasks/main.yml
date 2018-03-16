@@ -1,15 +1,12 @@
 ---
 
-- name: install pip
-  apt: name=python3-pip update_cache=yes state=installed
-  tags: packages
-- name: install pipenv
-  pip: name=pipenv
-  tags: packages
 - name: pull backend repo
   git: repo=https://github.com/angstromctf/djangoctf.git dest=/srv/djangoctf
   tags: deploy, backend
   notify: restart gunicorn
+- name: install backend dependencies
+  command: pipenv install --dev chdir=/srv/djangoctf
+  tags: packages
 - name: migrate django database
   shell: pipenv run python3 manage.py makemigrations api && pipenv run python3 manage.py migrate chdir=/srv/djangoctf
   tags: deploy, backend
@@ -26,9 +23,6 @@
     mode: 0755
   tags: config, backend
   notify: restart gunicorn
-- name: install backend dependencies
-  command: pipenv install --dev chdir=/srv/djangoctf
-  tags: packages
 - name: setup gunicorn
   copy:
     src: ../files/djangoctf.service
