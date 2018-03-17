@@ -7,15 +7,18 @@ ALLOWED_HOSTS = ['angstromctf.com', 'localhost']
 
 DATABASES = {
     'default': {
-        'ENGINE' : 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'angstromctf2018',
+        'USER': 'djangoctf',
+        'PASSWORD': '{{ database_password }}',
+        'HOST': 'localhost',
+        'PORT': ''
     }
-}
 
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 
-SHELL_ENABLED = False
+SHELL_ENABLED = True
 SHELL_PRIVATE_KEY = "djangoctf/shell_privkey"
 SHELL_HOSTNAME = "shell.angstromctf.com"
 

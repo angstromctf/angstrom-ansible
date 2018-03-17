@@ -36,15 +36,16 @@ server {
 
 	location /api/ {
 		include proxy_params;
-		proxy_pass http://localhost:8000/;
+		rewrite ^/api(.*)$ $1 break;
+		proxy_pass http://unix:/srv/djangoctf/djangoctf.sock;
 	}
-
-	#location /static {
-	#	root /srv/http;
-	#}
 
 	location / {
 		root /srv/angstromctf/dist;
+	}
+
+	location /static/ {
+		alias /srv/problems/;
 	}
 
 	error_page 404 /;

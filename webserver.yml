@@ -10,3 +10,12 @@
     - frontend
     - backend
     - problems
+  tasks:
+    - name: export problems
+      shell: pipenv run python3 problems/__main__.py export /root/problems /tmp/problems.json /srv/problems chdir=/root/deploy
+      tags: deploy, problems
+    - name: import problems
+      shell: pipenv run python3 manage.py importproblems /tmp/problems.json chdir=/srv/djangoctf
+      environment:
+        DJANGO_SETTINGS_MODULE: djangoctf.settings.production
+      tags: deploy, problems

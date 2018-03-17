@@ -2,10 +2,10 @@
 
 - name: pull deploy repo
   git: repo=https://github.com/angstromctf/deploy.git dest=/root/deploy
-  tags: deploy
+  tags: deploy, problems
 - name: pull problems repo
   git: repo=git@github.com:singerng/problems.git dest=/root/problems accept_hostkey=true version={{ ansible_date_time.year }}
-  tags: deploy
-- name: install docker-deploy dependencies
+  tags: deploy, problems
+- name: install deploy dependencies
   command: pipenv install --dev chdir=/root/deploy
-  tags: packages, deploy
+  tags: packages, deploy, problems

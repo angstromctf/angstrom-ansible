@@ -3,3 +3,4 @@
 django_secret_key: "[REDACTED]"
 email_password: "[REDACTED]"
 sendgrid_api_key: "[REDACTED]"
+database_password: "[REDACTED]"

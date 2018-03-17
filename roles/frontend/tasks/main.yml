@@ -1,10 +1,10 @@
 ---
 
 - name: add ppas
-  apt_repository: repo="ppa:{{ item }}/stable"
+  apt_repository: repo="ppa:{{ item }}"
   with_items:
-    - nginx
-    - certbot
+    - nginx/stable
+    - certbot/certbot
   tags: packages
 - name: install nginx and certbot
   apt: name=nginx,python-certbot-nginx update_cache=true state=installed
@@ -46,7 +46,7 @@
 - name: update nginx config
   copy:
     src: ../files/angstromctf.com
-    dest: /etc/nginx/sites-available/
+    dest: /etc/nginx/sites-available/angstromctf.com
     owner: root
     group: root
     mode: 0755
